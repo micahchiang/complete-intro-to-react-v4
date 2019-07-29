@@ -1,16 +1,21 @@
-import React, { useState, useEffect, useContext } from "react";
-import pet from "@frontendmasters/pet";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  FunctionComponent
+} from "react";
+import pet, { Photo } from "@frontendmasters/pet";
 import { navigate } from "@reach/router";
 import Modal from "./Modal";
 import Carousel from "./Carousel";
 import ThemeContext from "./ThemeContext";
 
-const Details = ({ id }) => {
+const Details: FunctionComponent<any> = ({ id }) => {
   const [name, setName] = useState("");
   const [animal, setAnimal] = useState("");
   const [location, setLocation] = useState("");
   const [desc, setDesc] = useState("");
-  const [media, setMedia] = useState("");
+  const [media, setMedia] = useState([] as Photo[]);
   const [breed, setBreed] = useState("");
   const [loading, setLoading] = useState(true);
   const [theme] = useContext(ThemeContext);
@@ -18,6 +23,10 @@ const Details = ({ id }) => {
   const [url, setUrl] = useState("");
 
   useEffect(() => {
+    if (!id) {
+      navigate("/");
+      return;
+    }
     pet.animal(id).then(({ animal }) => {
       setName(animal.name);
       setUrl(animal.url);
